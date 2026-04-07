@@ -1,6 +1,7 @@
 import type { ExtensionAPI } from "@oh-my-pi/pi-coding-agent";
-import { readFileSync } from "fs";
-import { join, dirname } from "path";
+import { lstatSync, mkdirSync, readFileSync, readlinkSync, rmSync, symlinkSync } from "fs";
+import { homedir } from "os";
+import { dirname, join } from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -23,18 +24,54 @@ const SKILL_NAMES = [
   "writing-skills",
 ];
 
+// OMP's plugin system has no working mechanism to expose skills from plugins.
+// The resources_discover event exists in the ExtensionAPI type system and
+// runner.ts has the handler plumbing, but emitResourcesDiscover() is never
+// called anywhere in the OMP codebase — the wiring is missing.
+//
+// Workaround: symlink each skill directory into ~/.omp/agent/skills/, which
+// is scanned by the native builtin provider (priority 100) on every skill
+// lookup. The native provider reads the filesystem fresh each call, so these
+// symlinks take effect immediately without a session restart.
+//
+// A non-symlink entry at the target path is left untouched, allowing a
+// same-named user-level skill to override the plugin's version.
+function ensureSkillSymlinks(): void {
+  const userSkillsDir = join(homedir(), ".omp", "agent", "skills");
+  mkdirSync(userSkillsDir, { recursive: true });
+
+  for (const name of SKILL_NAMES) {
+    const source = join(SKILLS_DIR, name);
+    const target = join(userSkillsDir, name);
+
+    try {
+      const stat = lstatSync(target);
+      if (!stat.isSymbolicLink()) continue; // real entry — leave it alone
+      if (readlinkSync(target) === source) continue; // already correct
+      rmSync(target, { force: true }); // stale symlink — replace below
+    } catch {
+      // target does not exist — fall through to create
+    }
+
+    try {
+      symlinkSync(source, target);
+    } catch {
+      // best-effort; if this fails the skill just won't be discoverable
+    }
+  }
+}
+
 export default function superpowers(pi: ExtensionAPI): void {
   pi.setLabel("Superpowers");
 
-  // Register all skill directories with OMP's skill discovery system.
-  // Each path must point to the directory containing SKILL.md (not the file itself).
+  // Keep the resources_discover handler so it works automatically once OMP
+  // wires up the emitResourcesDiscover() call site.
   pi.on("resources_discover", () => ({
     skillPaths: SKILL_NAMES.map(name => join(SKILLS_DIR, name)),
   }));
 
-  // Inject the using-superpowers bootstrap at session start so the agent sees
-  // the skill mandate immediately, without having to decide to read it first.
-  // Re-inject after compaction for the same reason.
+  // Inject the using-superpowers bootstrap so the agent sees the skill mandate
+  // immediately. Re-inject after compaction for the same reason.
   const inject = () => {
     const content = readFileSync(
       join(SKILLS_DIR, "using-superpowers", "SKILL.md"),
@@ -46,6 +83,10 @@ export default function superpowers(pi: ExtensionAPI): void {
     );
   };
 
-  pi.on("session_start", inject);
+  pi.on("session_start", (_event) => {
+    ensureSkillSymlinks();
+    inject();
+  });
+
   pi.on("session_compact", inject);
 }
