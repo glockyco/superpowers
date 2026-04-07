@@ -1,5 +1,5 @@
 ---
-name: requesting-code-review
+name: "superpowers:requesting-code-review"
 description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
 ---
 
@@ -32,7 +32,7 @@ HEAD_SHA=$(git rev-parse HEAD)
 **2. Dispatch code-reviewer subagent:**
 
 Use the Task tool with `reviewer` agent type. Fill the template at
-`skill://requesting-code-review/code-reviewer.md` and include it in the assignment.
+`skill://superpowers:requesting-code-review/code-reviewer.md` and include it in the assignment.
 
 **Placeholders:**
 - `{WHAT_WAS_IMPLEMENTED}` - What you just built

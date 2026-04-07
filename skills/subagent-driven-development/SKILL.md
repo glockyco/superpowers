@@ -1,5 +1,5 @@
 ---
-name: subagent-driven-development
+name: "superpowers:subagent-driven-development"
 description: Use when executing implementation plans with independent tasks in the current session
 ---
 
@@ -61,7 +61,7 @@ digraph process {
     "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
     "More tasks remain?" [shape=diamond];
     "Dispatch final code reviewer subagent for entire implementation" [shape=box];
-    "Use skill://finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "Use skill://superpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
 
     "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
     "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
@@ -80,7 +80,7 @@ digraph process {
     "Mark task complete in TodoWrite" -> "More tasks remain?";
     "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
     "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
-    "Dispatch final code reviewer subagent for entire implementation" -> "Use skill://finishing-a-development-branch";
+    "Dispatch final code reviewer subagent for entire implementation" -> "Use skill://superpowers:finishing-a-development-branch";
 }
 ```
 
@@ -265,13 +265,13 @@ Done!
 ## Integration
 
 **Required workflow skills:**
-- **skill://using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **skill://writing-plans** - Creates the plan this skill executes
-- **skill://requesting-code-review** - Code review template for reviewer subagents
-- **skill://finishing-a-development-branch** - Complete development after all tasks
+- **skill://superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
+- **skill://superpowers:writing-plans** - Creates the plan this skill executes
+- **skill://superpowers:requesting-code-review** - Code review template for reviewer subagents
+- **skill://superpowers:finishing-a-development-branch** - Complete development after all tasks
 
 **Subagents should use:**
-- **skill://test-driven-development** - Subagents follow TDD for each task
+- **skill://superpowers:test-driven-development** - Subagents follow TDD for each task
 
 **Alternative workflow:**
-- **skill://executing-plans** - Use for parallel session instead of same-session execution
+- **skill://superpowers:executing-plans** - Use for parallel session instead of same-session execution

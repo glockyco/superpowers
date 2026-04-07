@@ -7,7 +7,7 @@ Oh My Pi equivalents below.
 
 | Skill references | Oh My Pi equivalent |
 |-----------------|---------------------|
-| `Skill` tool (invoke a skill) | `read skill://skill-name` |
+| `Skill` tool (invoke a skill) | `read skill://superpowers:skill-name` |
 | `Task tool (superpowers:code-reviewer)` | Task tool, `reviewer` agent type |
 | `Task tool (general-purpose)` | Task tool, `task` agent type |
 | Multiple `Task` calls (parallel) | Parallel Task tool calls |
@@ -17,9 +17,9 @@ Oh My Pi equivalents below.
 
 ## Skill References
 
-When a skill says `superpowers:skill-name`, read `skill://skill-name`.
+When a skill says `superpowers:skill-name`, read `skill://superpowers:skill-name`.
 
-Example: `superpowers:systematic-debugging` → `read skill://systematic-debugging`
+Example: `superpowers:systematic-debugging` → `read skill://superpowers:systematic-debugging`
 
 ## Subagent Dispatch
 
@@ -35,7 +35,7 @@ use the Task tool with the appropriate Oh My Pi agent type:
 Task tool (reviewer agent):
   description: "Code review for <what was implemented>"
   assignment: |
-    Read skill://requesting-code-review/code-reviewer.md for the template.
+    Read skill://superpowers:requesting-code-review/code-reviewer.md for the template.
     Fill in: WHAT_WAS_IMPLEMENTED, PLAN_OR_REQUIREMENTS, BASE_SHA, HEAD_SHA, DESCRIPTION
     Run git diff and review against the template's checklist.
     Return structured review output per the template's Output Format section.

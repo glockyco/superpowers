@@ -1,5 +1,5 @@
 ---
-name: executing-plans
+name: "superpowers:executing-plans"
 description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
 ---
 
@@ -31,7 +31,7 @@ For each task:
 
 After all tasks complete and verified:
 - Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use skill://finishing-a-development-branch
+- **REQUIRED SUB-SKILL:** Use skill://superpowers:finishing-a-development-branch
 - Follow that skill to verify tests, present options, execute choice
 
 ## When to Stop and Ask for Help
@@ -63,6 +63,6 @@ After all tasks complete and verified:
 ## Integration
 
 **Required workflow skills:**
-- **skill://using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
-- **skill://writing-plans** - Creates the plan this skill executes
-- **skill://finishing-a-development-branch** - Complete development after all tasks
+- **skill://superpowers:using-git-worktrees** - REQUIRED: Set up isolated workspace before starting
+- **skill://superpowers:writing-plans** - Creates the plan this skill executes
+- **skill://superpowers:finishing-a-development-branch** - Complete development after all tasks

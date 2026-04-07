@@ -1,5 +1,5 @@
 ---
-name: using-superpowers
+name: "superpowers:using-superpowers"
 description: Use when starting any conversation - establishes how to find and use skills, requiring Skill tool invocation before ANY response including clarifying questions
 ---
 
@@ -30,16 +30,16 @@ If CLAUDE.md, GEMINI.md, or AGENTS.md says "don't use TDD" and a skill says "alw
 **In Oh My Pi:** Use the `read` tool with a `skill://` URI:
 
 ```
-read skill://systematic-debugging
+read skill://superpowers:systematic-debugging
 ```
 
 The skill's full content is loaded and presented to you. Follow it directly.
 
-When you see `skill://skill-name` referenced in skill content, read it with the `read` tool.
+When you see `skill://superpowers:skill-name` referenced in skill content, read it with the `read` tool.
 
 ## Oh My Pi Tool Mapping
 
-See `skill://using-superpowers/references/omp-tools` for the complete mapping of
+See `skill://superpowers:using-superpowers/references/omp-tools` for the complete mapping of
 skill references to Oh My Pi tool equivalents (Task agents, TodoWrite, file tools).
 # Using Skills
 

@@ -8,7 +8,7 @@ Use this template when dispatching a code quality reviewer subagent.
 
 ```
 Task tool (reviewer agent):
-  Read skill://requesting-code-review/code-reviewer.md for the template.
+  Read skill://superpowers:requesting-code-review/code-reviewer.md for the template.
   Fill in WHAT_WAS_IMPLEMENTED, PLAN_OR_REQUIREMENTS, BASE_SHA, HEAD_SHA, DESCRIPTION.
 ```
 
