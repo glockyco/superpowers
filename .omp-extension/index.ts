@@ -64,8 +64,12 @@ function ensureSkillSymlinks(): void {
 export default function superpowers(pi: ExtensionAPI): void {
   pi.setLabel("Superpowers");
 
-  // Keep the resources_discover handler so it works automatically once OMP
-  // wires up the emitResourcesDiscover() call site.
+  // Symlink skills into ~/.omp/agent/skills/ synchronously during extension
+  // loading, before OMP builds the system prompt and calls loadSkills().
+  // session_start fires after skills are already loaded, so that's too late.
+  ensureSkillSymlinks();
+
+  // Keep resources_discover for when OMP wires up emitResourcesDiscover().
   pi.on("resources_discover", () => ({
     skillPaths: SKILL_NAMES.map(name => join(SKILLS_DIR, name)),
   }));
@@ -83,10 +87,6 @@ export default function superpowers(pi: ExtensionAPI): void {
     );
   };
 
-  pi.on("session_start", (_event) => {
-    ensureSkillSymlinks();
-    inject();
-  });
-
+  pi.on("session_start", inject);
   pi.on("session_compact", inject);
 }
