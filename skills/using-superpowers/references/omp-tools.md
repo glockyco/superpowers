@@ -19,7 +19,7 @@ Oh My Pi has no `Skill` tool. Skills are loaded via the `read` tool with a
 | Skill references | Oh My Pi equivalent |
 |---|---|
 | `TodoWrite` (task tracking) | `todo_write` tool |
-| `Task` tool (dispatch subagent) | `task` tool with an agent type from the `agent` parameter (`task`, `reviewer`, `explore`, `plan`, etc.) |
+| `Task` tool (dispatch subagent) | `task` tool with an agent type from the `agent` parameter (`task`, `reviewer`, `explore`, `plan`, `designer`, `librarian`) |
 | Multiple `Task` calls (parallel) | Multiple `task` calls in the same response (parallel) |
 | `Read`, `Write`, `Edit` (files) | Native `read`, `write`, `edit` tools |
 | `Bash` (run commands) | Native `bash` tool |
@@ -37,6 +37,8 @@ When a skill names a specific subagent like `code-reviewer` or
 | `general-purpose` / `implementer` / `spec-reviewer` | `task` |
 | `explore` (read-only discovery) | `explore` |
 | `plan` (architectural decisions) | `plan` |
+| `designer` (UI / visual specialist) | `designer` |
+| `librarian` (library / API research) | `librarian` |
 
 Example dispatch:
 
@@ -52,3 +54,10 @@ task tool (reviewer agent):
 
 The `reviewer` agent has these tools: read, grep, find, bash, lsp, web_search,
 ast_grep, report_finding, submit_result.
+
+## Plan mode
+
+Plan mode in Oh My Pi is a session-level state, **not** an agent tool:
+
+- **Entering plan mode** is a user action — they press `Alt+Shift+P` (the default `app.plan.toggle` keybinding) or invoke the equivalent command. There is no `EnterPlanMode` tool. When upstream skills say "About to EnterPlanMode? → brainstorm first", read it as "Just entered plan mode? → brainstorm first." You detect plan mode by the `plan-mode-active` system-prompt block Oh My Pi injects when the user toggles it on, which constrains you to read-only operations and a single plan file at `local://<name>.md`.
+- **Exiting plan mode** is the `exit_plan_mode` tool. Required parameter: `title`. The plan content itself is written to the `local://` path via `edit`/`write` *before* calling the tool; `exit_plan_mode` is the approval gate, not the plan-writing step. You MUST call this tool yourself when the plan is ready — never ask the user via text or `ask`.
